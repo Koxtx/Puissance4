@@ -1,0 +1,9 @@
+.board {
+  height: 400px;
+  display: grid;
+  grid-template-columns: repeat(7, 50px);
+  grid-gap: 5px;
+  margin: 0px;
+  background-color: darkblue;
+  position: relative;
+}
