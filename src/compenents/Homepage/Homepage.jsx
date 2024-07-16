@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Board from "../Board/Board";
 import style from "./Homepage.module.scss";
+import { UserContext } from "../../context/UserContext";
+import { Link } from "react-router-dom";
+import { AllUsersContext } from "../../context/AllUserContext";
+import Joueurs from "../Joueurs/Joueurs";
 
 export default function Homepage() {
+  const { user } = useContext(UserContext);
+  const { allUsers } = useContext(AllUsersContext);
   const initialBoard = Array(6)
     .fill(null)
     .map(() => Array(7).fill(null));
@@ -90,21 +96,36 @@ export default function Homepage() {
 
   return (
     <main className={`${style.Homepage} mhFull`}>
-      <Board
-        board={board}
-        onClick={handleClick}
-        droppingColumn={droppingColumn}
-        droppingRow={droppingRow}
-      />
-      <div>
-        {winner
-          ? `Le gagnant est: ${winner}`
-          : `Tour du joueur: ${isRedNext ? "Rouge" : "Jaune"}`}
-      </div>
-      {winner && (
-        <button onClick={handleReset} className={`${style.button}`}>
-          Réinitialiser le jeu
-        </button>
+      {user ? (
+        <>
+          <Board
+            board={board}
+            onClick={handleClick}
+            droppingColumn={droppingColumn}
+            droppingRow={droppingRow}
+          />
+          <div>
+            {winner
+              ? `Le gagnant est: ${winner}`
+              : `Tour du joueur: ${isRedNext ? "Rouge" : "Jaune"}`}
+          </div>
+          {winner && (
+            <button onClick={handleReset} className={`${style.button}`}>
+              Réinitialiser le jeu
+            </button>
+          )}
+
+          {allUsers &&
+            allUsers.map((user) => {
+              <Joueurs key={user._id} user={user} />;
+            })}
+          {console.log(allUsers)}
+        </>
+      ) : (
+        <p>
+          connectez-vous <Link to="/login">Login</Link> ou inscrivez-vous
+          <Link to="/register">Register</Link>
+        </p>
       )}
     </main>
   );
