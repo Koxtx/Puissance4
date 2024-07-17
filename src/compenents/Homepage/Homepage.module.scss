@@ -1,8 +1,15 @@
 .Homepage {
   text-align: center;
   display: flex;
+  flex-direction: column; 
   justify-content: center;
+  padding: 20px;
+
+  @media (min-width: 600px) {
+    flex-direction: row; 
+  }
 }
+
 .button {
   max-height: 50px;
   margin-top: 20px;

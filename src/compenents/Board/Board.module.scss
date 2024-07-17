@@ -1,9 +1,13 @@
 .board {
-  height: 400px;
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(7, 50px);
+  grid-template-columns: repeat(7, 1fr); 
   grid-gap: 5px;
   margin: 0px;
   background-color: darkblue;
   position: relative;
+
+  @media (min-width: 600px) {
+    height: 400px; 
+  }
 }
