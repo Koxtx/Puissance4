@@ -29,12 +29,17 @@ export async function signin(values) {
 }
 
 export async function getUsers() {
-  if (!localStorage.getItem("user")) return [];
+  if (!localStorage.getItem("user")) {
+    return [];
+  }
   const { user } = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
   try {
-    const response = await fetch(BASE_URL, {
+    const response = await fetch(`${BASE_URL}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ user }),
     });
     const allUsers = await response.json();

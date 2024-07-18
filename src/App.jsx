@@ -3,6 +3,7 @@ import Header from "./compenents/Header/Header";
 import UserProvider from "./Provider/UserProvider";
 import AllUsersProviders from "./Provider/AllUserProvider";
 import GameProvider from "./Provider/GameProvider";
+import GameSocketProvider from "./Provider/GameSocketProvider";
 import SocketProvider from "./Provider/SocketProvider";
 
 function App() {
@@ -12,8 +13,10 @@ function App() {
         <AllUsersProviders>
           <GameProvider>
             <SocketProvider>
-              <Header />
-              <Outlet />
+              <GameSocketProvider>
+                <Header />
+                <Outlet />
+              </GameSocketProvider>
             </SocketProvider>
           </GameProvider>
         </AllUsersProviders>

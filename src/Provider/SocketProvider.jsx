@@ -1,3 +1,4 @@
+// SocketProvider.js
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../context/SocketContext";
 import { UserContext } from "../context/UserContext";
@@ -7,23 +8,30 @@ export default function SocketProvider({ children }) {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { user } = useContext(UserContext);
-  console.log(socket);
+
   useEffect(() => {
     if (user) {
-      const socket = io("http://localhost:5000", {
-        query: {
-          userId: user._id,
-        },
+      const newSocket = io("http://localhost:5000", {
+        query: { userId: user._id },
       });
-      setSocket(socket);
-      socket.on("getOnlineUsers", (users) => {
+      setSocket(newSocket);
+
+      newSocket.on("getOnlineUsers", (users) => {
         setOnlineUsers(users);
       });
-      return () => socket.close();
+
+      newSocket.on("disconnect", () => {
+        console.log("Socket disconnected");
+      });
+
+      return () => {
+        newSocket.disconnect();
+      };
     } else {
       setSocket(null);
     }
   }, [user]);
+
   return (
     <SocketContext.Provider value={{ socket, onlineUsers }}>
       {children}

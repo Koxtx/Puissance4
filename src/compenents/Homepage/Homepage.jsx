@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Board from "../Board/Board";
 import style from "./Homepage.module.scss";
 import { UserContext } from "../../context/UserContext";
@@ -6,7 +6,13 @@ import { Link } from "react-router-dom";
 import { AllUsersContext } from "../../context/AllUserContext";
 import Joueurs from "../Joueurs/Joueurs";
 
+import { SocketContext } from "../../context/SocketContext";
+import { GameSocketContext } from "../../context/GameSocketContext";
+
 export default function Homepage() {
+  const { socket } = useContext(SocketContext);
+  const { currentGame } = useContext(GameSocketContext);
+
   const { user } = useContext(UserContext);
   const { allUsers } = useContext(AllUsersContext);
   const initialBoard = Array(6)
@@ -18,10 +24,25 @@ export default function Homepage() {
   const [droppingColumn, setDroppingColumn] = useState(null);
   const [droppingRow, setDroppingRow] = useState(null);
 
+  useEffect(() => {
+    try {
+      if (socket) {
+        socket.emit("join_room", 1); // 1 = ID de la salle
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [socket]);
+
+  // useEffect(() => {
+  //   setBoard(currentGame);
+  // }, [currentGame]);
+
   const handleClick = (colIndex) => {
     if (winner) return; // Empêcher les clics après qu'un gagnant soit déclaré
 
     const newBoard = board.map((row) => row.slice());
+    socket.emit("gameUpdate", { board: newBoard, roomId: 1 });
     let rowIndex = null;
     for (let row = 5; row >= 0; row--) {
       if (!newBoard[row][colIndex]) {
@@ -95,37 +116,44 @@ export default function Homepage() {
   };
 
   return (
-    <main className={`${style.Homepage} mhFull`}>
+    <main className={`${style.Homepage} mhFull `}>
       {user ? (
-        <>
-          <Board
-            board={board}
-            onClick={handleClick}
-            droppingColumn={droppingColumn}
-            droppingRow={droppingRow}
-          />
-          <div>
-            {winner
-              ? `Le gagnant est: ${winner}`
-              : `Tour du joueur: ${isRedNext ? "Rouge" : "Jaune"}`}
-          </div>
-          {winner && (
-            <button onClick={handleReset} className={`${style.button}`}>
-              Réinitialiser le jeu
-            </button>
-          )}
+        <div className={`d-flex flex-row flex-fill center ${style.div1} `}>
+          <div className="d-flex flex-column-reverse flex-fill center m-5">
+            <div className={`${style.board}`}>
+              <Board
+                board={board}
+                onClick={handleClick}
+                droppingColumn={droppingColumn}
+                droppingRow={droppingRow}
+              />
+            </div>
+            <div className={`${style.tour}`}>
+              {winner
+                ? `Le gagnant est: ${winner}`
+                : `Tour du joueur: ${isRedNext ? "Rouge" : "Jaune"}`}
 
-          {allUsers &&
-            allUsers.map((user) => {
-              <Joueurs key={user._id} user={user} />;
-            })}
-          {console.log(allUsers)}
-        </>
+              {winner && (
+                <button onClick={handleReset} className={`${style.button}`}>
+                  Réinitialiser le jeu
+                </button>
+              )}
+            </div>
+          </div>
+          <div className={`${style.joueur} mr-5`}>
+            {allUsers &&
+              allUsers.map((user) => {
+                return <Joueurs key={user._id} user={user} />;
+              })}
+          </div>
+        </div>
       ) : (
-        <p>
-          connectez-vous <Link to="/login">Login</Link> ou inscrivez-vous
-          <Link to="/register">Register</Link>
-        </p>
+        <div className={`${style.log}`}>
+          <p>
+            connectez-vous <Link to="/login">Login</Link> ou inscrivez-vous
+            <Link to="/register">Register</Link>
+          </p>
+        </div>
       )}
     </main>
   );

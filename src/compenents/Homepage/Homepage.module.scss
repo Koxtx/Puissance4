@@ -1,8 +1,42 @@
+@use "../../assets/styles/mixin" as mixin;
+
 .Homepage {
+  width: 100%;
   text-align: center;
-  display: flex;
-  justify-content: center;
+  background-color: #f3f4f6;
+  color: #4b5563;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+  }
+  .div1 {
+    @include mixin.xs {
+      flex-direction: column-reverse;
+    }
+  }
+
+  .board {
+    width: 100%;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include mixin.xs {
+      height: 300px;
+    }
+  }
+  .tour {
+    width: 100%;
+    margin-bottom: 40px;
+    margin-left: 40px;
+    display: flex;
+    justify-content: start;
+  }
+  .joueur {
+    width: 100px;
+  }
 }
+
 .button {
   max-height: 50px;
   margin-top: 20px;

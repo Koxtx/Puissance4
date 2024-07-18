@@ -23,7 +23,7 @@ export default function GameProvider({ children }) {
   return (
     <GameContext.Provider
       value={{
-        currentGame,
+        // currentGame,
         startGame,
         makeMove,
         fetchGame,

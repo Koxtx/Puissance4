@@ -1,9 +1,19 @@
+@use "../../assets/styles/mixin" as mixin;
+
 .board {
-  height: 400px;
+  padding: 10px;
+  border-radius: 10%;
+  width: 600px;
+  height: 600px;
+  @include mixin.xs {
+    width: 300px;
+    height: 300px;
+  }
+
   display: grid;
-  grid-template-columns: repeat(7, 50px);
+  grid-template-columns: repeat(7, 1fr);
   grid-gap: 5px;
   margin: 0px;
-  background-color: darkblue;
+  background-color: #1e3a8a;
   position: relative;
 }

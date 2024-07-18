@@ -1,0 +1,19 @@
+.header {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  a {
+    text-decoration: none;
+    color: #4b5563;
+  }
+  .title {
+    width: 95%;
+  }
+  .nav {
+    justify-content: start;
+    height: 100%;
+    border-top-right-radius: 1000px;
+  }
+}
