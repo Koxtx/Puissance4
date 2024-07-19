@@ -16,4 +16,8 @@
   margin: 0px;
   background-color: #1e3a8a;
   position: relative;
+
+  @media (min-width: 600px) {
+    height: 400px;
+  }
 }
