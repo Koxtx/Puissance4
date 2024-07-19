@@ -9,13 +9,19 @@ export default function Header() {
     <header className={` ${styles.header}  `}>
       <div className={`d-flex flex-row flex-fill aic p-10  `}>
         <div className={`${styles.title}`}>
-          <h1 className="mr-15" to="/">
-            Puissance4
-          </h1>
+          <NavLink to="/">
+            <h1 className="mr-15" to="/">
+              Puissance4
+            </h1>
+          </NavLink>
         </div>
         <nav className={`d-flex flex-row  aic p-10 ${styles.nav} `}>
           {user ? (
-            <NavLink to="/logout">Logout</NavLink>
+            <>
+              <NavLink to="/logout" className={`mr-5`}>
+                Logout
+              </NavLink>
+            </>
           ) : (
             <>
               <NavLink to="/register" className="mr-15">

@@ -27,24 +27,3 @@ export async function signin(values) {
     console.error(error);
   }
 }
-
-export async function getUsers() {
-  if (!localStorage.getItem("user")) {
-    return [];
-  }
-  const { user } = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
-  try {
-    const response = await fetch(`${BASE_URL}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user }),
-    });
-    const allUsers = await response.json();
-    return allUsers;
-  } catch (error) {
-    console.error(error);
-  }
-}
