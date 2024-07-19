@@ -5,23 +5,23 @@ import { GameSocketContext } from "../context/GameSocketContext";
 
 export default function GameSocketProvider({ children }) {
   const { socket } = useContext(SocketContext);
-  // const { fetchGame, currentGame } = useContext(GameContext);
-  const [currentGame, setCurrentGame] = useState("null");
+  const [currentGame, setCurrentGame] = useState(null);
 
   useEffect(() => {
-    const handleGameUpdate = (game) => {
-      fetchGame(game._id); // Mettez à jour le jeu avec les nouvelles données
-    };
-
     if (socket) {
-      socket.on("gameUpdate", setCurrentGame);
-    }
+      socket.on("updateBoard", (game) => {
+        setCurrentGame(game);
+      });
 
-    return () => {
-      if (socket) {
-        socket.off("gameUpdate", setCurrentGame);
-      }
-    };
+      socket.on("gameOver", (game) => {
+        setCurrentGame(game);
+      });
+
+      return () => {
+        socket.off("updateBoard");
+        socket.off("gameOver");
+      };
+    }
   }, [socket]);
 
   return (

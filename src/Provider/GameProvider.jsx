@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { GameContext } from "../context/GameContext";
-import { createGame, updateGame, getGame } from "../apis/games";
+import { joinGame, makeMove, getGameStatus } from "../apis/games";
 
 export default function GameProvider({ children }) {
   const [currentGame, setCurrentGame] = useState(null);
 
-  async function startGame(player1Id, player2Id) {
-    const newGame = await createGame(player1Id, player2Id);
+  async function startGame(playerId) {
+    const newGame = await joinGame(playerId);
     setCurrentGame(newGame);
   }
 
-  async function makeMove(gameId, column) {
-    const updatedGame = await updateGame(gameId, column);
+  async function makeMove(gameId, row, col, playerId) {
+    const updatedGame = await makeMove(gameId, row, col, playerId);
     setCurrentGame(updatedGame);
   }
 
@@ -23,7 +23,7 @@ export default function GameProvider({ children }) {
   return (
     <GameContext.Provider
       value={{
-        // currentGame,
+        currentGame,
         startGame,
         makeMove,
         fetchGame,

@@ -1,9 +1,8 @@
-// api.js
 const BASE_URL = "http://localhost:5000/api/games";
 
-export async function getGame(gameId) {
+export async function getGameStatus(gameId) {
   try {
-    const response = await fetch(`${BASE_URL}/${gameId}`);
+    const response = await fetch(`${BASE_URL}/status/${gameId}`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -15,38 +14,38 @@ export async function getGame(gameId) {
   }
 }
 
-export async function createGame(player1Id, player2Id) {
+export async function joinGame(playerId) {
   try {
-    const response = await fetch(BASE_URL, {
+    const response = await fetch(`${BASE_URL}/join`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ player1Id, player2Id }),
+      body: JSON.stringify({ playerId }),
     });
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    const newGame = await response.json();
-    return newGame;
+    const game = await response.json();
+    return game;
   } catch (error) {
-    console.error("Error creating game:", error);
+    console.error("Error joining game:", error);
     throw error;
   }
 }
 
-export async function updateGame(gameId, column) {
+export async function makeMove(gameId, row, col, playerId) {
   try {
-    const response = await fetch(`${BASE_URL}/${gameId}`, {
-      method: "PUT",
+    const response = await fetch(`${BASE_URL}/move`, {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ column }),
+      body: JSON.stringify({ gameId, row, col, playerId }),
     });
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    const updatedGame = await response.json();
-    return updatedGame;
+    const game = await response.json();
+    return game;
   } catch (error) {
-    console.error("Error updating game:", error);
+    console.error("Error making move:", error);
     throw error;
   }
 }
