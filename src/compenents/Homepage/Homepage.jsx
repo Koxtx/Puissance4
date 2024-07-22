@@ -7,7 +7,7 @@ import { SocketContext } from "../../context/SocketContext";
 import { GameSocketContext } from "../../context/GameSocketContext";
 import Modal from "react-modal";
 
-Modal.setAppElement("#root"); // Assurez-vous que l'élément racine est correctement défini
+Modal.setAppElement("#root");
 
 export default function Homepage() {
   const { socket } = useContext(SocketContext);
@@ -22,9 +22,11 @@ export default function Homepage() {
   const [winner, setWinner] = useState(null);
   const [droppingColumn, setDroppingColumn] = useState(null);
   const [droppingRow, setDroppingRow] = useState(null);
+  const [droppingColor, setDroppingColor] = useState(null);
   const [playerColor, setPlayerColor] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [players, setPlayers] = useState([]);
+  const [winningCells, setWinningCells] = useState([]);
 
   useEffect(() => {
     if (socket) {
@@ -42,9 +44,10 @@ export default function Homepage() {
         setModalIsOpen(true);
       });
 
-      socket.on("gameOver", ({ winner }) => {
+      socket.on("gameOver", ({ winner, winningCells }) => {
         console.log("Game over:", winner);
         setWinner(winner);
+        setWinningCells(winningCells);
       });
 
       socket.on(
@@ -54,6 +57,7 @@ export default function Homepage() {
           setIsRedNext(currentPlayer === "R");
           setPlayerColor(playerColor);
           setModalIsOpen(true);
+          setWinningCells([]);
         }
       );
 
@@ -72,7 +76,7 @@ export default function Homepage() {
   }, [socket, user._id]);
 
   const handleClick = (colIndex) => {
-    if (winner) return; // Empêcher les clics après qu'un gagnant soit déclaré
+    if (winner) return;
 
     const newBoard = board.map((row) => row.slice());
     let rowIndex = null;
@@ -88,6 +92,8 @@ export default function Homepage() {
       console.log(`Making move: row ${rowIndex}, col ${colIndex}`);
       setDroppingColumn(colIndex);
       setDroppingRow(rowIndex);
+      setDroppingColor(isRedNext ? "R" : "Y");
+
       setTimeout(() => {
         socket.emit("makeMove", {
           row: rowIndex,
@@ -96,7 +102,8 @@ export default function Homepage() {
         });
         setDroppingColumn(null);
         setDroppingRow(null);
-      }, 600); // Durée de l'animation
+        setDroppingColor(null);
+      }, 600); // Correspond à la durée de l'animation
     }
   };
 
@@ -104,8 +111,9 @@ export default function Homepage() {
     setBoard(initialBoard);
     setIsRedNext(true);
     setWinner(null);
+    setWinningCells([]);
     socket.emit("resetGameForPlayer", { playerColor });
-    window.location.reload(); // Actualiser la page pour mettre à jour les victoires
+    window.location.reload();
   };
 
   const closeModal = () => {
@@ -113,50 +121,47 @@ export default function Homepage() {
   };
 
   return (
-    <main className={`${style.Homepage} mhFull`}>
-      {user ? (
-        <div className={`d-flex flex-row flex-fill center ${style.div1}`}>
-          <div className="d-flex flex-column-reverse flex-fill center m-5">
-            <div className={`${style.board}`}>
-              <Board
-                board={board}
-                onClick={handleClick}
-                droppingColumn={droppingColumn}
-                droppingRow={droppingRow}
-              />
-            </div>
-            <div className={`${style.tour}`}>
-              {winner ? (
-                <>
-                  {`Le gagnant est: ${winner}`}
-                  <button onClick={handleReset} className={`${style.button}`}>
-                    Réinitialiser le jeu
-                  </button>
-                </>
-              ) : (
-                `Tour du joueur: ${isRedNext ? "Rouge" : "Jaune"}`
-              )}
-            </div>
+    <main className={`${style.Homepage} `}>
+      <div className={`d-flex flex-row-reverse center ${style.div1}`}>
+        <div className={`d-flex flex-column-reverse flex-fill center  `}>
+          <div className={style.board}>
+            <Board
+              board={board}
+              onClick={handleClick}
+              droppingColumn={droppingColumn}
+              droppingRow={droppingRow}
+              droppingColor={droppingColor}
+              winningCells={winningCells}
+            />
           </div>
-          <div className="d-flex flex-column justify-content-center align-items-center">
-            {players.length === 2 && (
-              <>
-                <h2>
-                  {players[0].username} {players[0].wins} vs {players[1].wins}{" "}
-                  {players[1].username}
-                </h2>
-              </>
+          <div className={style.tour}>
+            {winner ? (
+              <>{`Le gagnant est: ${winner}`}</>
+            ) : (
+              `Tour du joueur: ${isRedNext ? "Rouge" : "Jaune"}`
             )}
           </div>
         </div>
-      ) : (
-        <div className={`${style.log}`}>
-          <p>
-            connectez-vous <Link to="/login">Login</Link> ou inscrivez-vous{" "}
-            <Link to="/register">Register</Link>
-          </p>
+        <div
+          className={`d-flex flex-column justify-content-center align-items-center ${style.vs}`}
+        >
+          {players.length === 2 && (
+            <>
+              <h2>
+                {players[0].username} {players[0].wins} vs {players[1].wins}{" "}
+                {players[1].username}
+              </h2>
+            </>
+          )}
         </div>
-      )}
+      </div>
+      {winner ? (
+        <div>
+          <button onClick={handleReset} className={`${style.button} btn`}>
+            Réinitialiser le jeu
+          </button>
+        </div>
+      ) : null}
 
       <Modal
         isOpen={modalIsOpen}
@@ -166,7 +171,7 @@ export default function Homepage() {
         overlayClassName={style.Overlay}
       >
         <h2>Vous êtes le joueur {playerColor === "R" ? "Rouge" : "Jaune"}</h2>
-        <button onClick={closeModal} className={style.button}>
+        <button onClick={closeModal} className={`btn ${style.buttonModal}`}>
           OK
         </button>
       </Modal>

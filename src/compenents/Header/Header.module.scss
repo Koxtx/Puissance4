@@ -1,15 +1,19 @@
 .header {
-  background-color: #f3f4f6;
-  color: #4b5563;
+  background-color: #2d3748;
+  color: #f7fafc;
   position: relative;
   width: 100%;
   margin: 0 auto;
   a {
     text-decoration: none;
-    color: #4b5563;
+    color: #f7fafc;
   }
   .title {
     width: 95%;
+    color: #f7fafc;
+    h1 {
+      color: #f7fafc;
+    }
   }
   .nav {
     justify-content: start;
