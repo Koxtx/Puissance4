@@ -121,47 +121,44 @@ export default function Homepage() {
   };
 
   return (
-    <main className={`${style.Homepage} `}>
-      <div className={`d-flex flex-row-reverse center ${style.div1}`}>
-        <div className={`d-flex flex-column-reverse flex-fill center  `}>
-          <div className={style.board}>
-            <Board
-              board={board}
-              onClick={handleClick}
-              droppingColumn={droppingColumn}
-              droppingRow={droppingRow}
-              droppingColor={droppingColor}
-              winningCells={winningCells}
-            />
+    <main className={`${style.Homepage} flex-fill`}>
+      <div className={`${style.vs}`}>
+        {players.length === 2 && (
+          <>
+            <h2>
+              {players[0].username} {players[0].wins} vs {players[1].wins}{" "}
+              {players[1].username}
+            </h2>
+          </>
+        )}
+      </div>
+      <div className={style.tour}>
+        {winner ? (
+          <>{`Le gagnant est: ${winner}`}</>
+        ) : (
+          `Tour du joueur: ${isRedNext ? "Rouge" : "Jaune"}`
+        )}
+      </div>
+      <div className={`${style.btnreset}`}>
+        {winner ? (
+          <div>
+            <button onClick={handleReset} className={`${style.button} btn`}>
+              Réinitialiser le jeu
+            </button>
           </div>
-          <div className={style.tour}>
-            {winner ? (
-              <>{`Le gagnant est: ${winner}`}</>
-            ) : (
-              `Tour du joueur: ${isRedNext ? "Rouge" : "Jaune"}`
-            )}
-          </div>
-        </div>
-        <div
-          className={`d-flex flex-column justify-content-center align-items-center ${style.vs}`}
-        >
-          {players.length === 2 && (
-            <>
-              <h2>
-                {players[0].username} {players[0].wins} vs {players[1].wins}{" "}
-                {players[1].username}
-              </h2>
-            </>
-          )}
+        ) : null}
+
+        <div className={`${style.board} flex-fill`}>
+          <Board
+            board={board}
+            onClick={handleClick}
+            droppingColumn={droppingColumn}
+            droppingRow={droppingRow}
+            droppingColor={droppingColor}
+            winningCells={winningCells}
+          />
         </div>
       </div>
-      {winner ? (
-        <div>
-          <button onClick={handleReset} className={`${style.button} btn`}>
-            Réinitialiser le jeu
-          </button>
-        </div>
-      ) : null}
 
       <Modal
         isOpen={modalIsOpen}

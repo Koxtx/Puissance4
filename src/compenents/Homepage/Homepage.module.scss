@@ -3,49 +3,56 @@
 .Homepage {
   width: 100%;
   text-align: center;
-  background-color: #2d3748;
+  background-color: #121212;
   color: #f7fafc;
   @media (min-width: 600px) {
     flex-direction: row;
   }
-  .div1 {
-    margin: 0;
+  .vs {
     @include mixin.xs {
-      flex-direction: column-reverse;
-    }
-  }
-
-  .board {
-    width: 100%;
-    height: 600px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    @include mixin.xs {
-      height: 350px;
+      font-size: small;
     }
   }
   .tour {
-    width: 100%;
-    margin-bottom: 20px;
-    margin-top: 10px;
-
     display: flex;
     justify-content: start;
-  }
-  .vs {
-    margin-top: 10px;
+    align-items: center;
     margin-left: 10px;
+    font-size: large;
+    @include mixin.xs {
+      margin-top: 20px;
+      font-size: medium;
+    }
+  }
+  .board {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    margin-top: 50px;
+    @include mixin.xs {
+      margin-top: 80px;
+      margin-bottom: 20px;
+    }
+  }
+  .btnreset {
+    margin-top: 20px;
+    @include mixin.xs {
+      display: flex;
+      flex-direction: column-reverse;
+    }
   }
 }
 
 .button {
   max-height: 50px;
-  margin-top: 30px;
   padding: 10px 20px;
+  margin: 5px;
   font-size: 16px;
   cursor: pointer;
+  @include mixin.xs {
+    margin-top: 20px;
+  }
 }
 .Modal {
   height: 100%;
@@ -53,12 +60,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #2d3748;
+  background-color: #121212;
 
   color: #f7fafc;
 
   .buttonModal {
     background-color: #e53e3e;
     color: #ffffff;
+    cursor: pointer;
   }
 }

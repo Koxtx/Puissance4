@@ -3,21 +3,28 @@
 .board {
   padding: 10px;
   border-radius: 10%;
-  width: 80%;
-  height: 100%;
+  width: 700px;
+  max-width: 800 px;
+
+  @include mixin.xl {
+    width: 600px;
+    height: 525px;
+  }
+  @include mixin.lg-lt {
+    width: 500px;
+    height: 425px;
+  }
   @include mixin.xs {
     width: 350px;
     height: 350px;
+    margin-top: 20px;
+    margin: 5px;
   }
 
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-gap: 5px;
   margin: 0px;
-  background-color: #1a202c;
+  background-color: #4b5563;
   // position: relative;
-
-  @media (min-width: 600px) {
-    height: 400px;
-  }
 }

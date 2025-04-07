@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signup } from "../../apis/users";
-import styles from "./Register.module.scss"
+import styles from "./Register.module.scss";
 
 export default function Register() {
   const [feedback, setFeedback] = useState("");
@@ -15,8 +15,7 @@ export default function Register() {
     password: yup
       .string()
       .required("Le mot de passe est obligatoire")
-      .min(5, "trop court")
-      .max(10, "trop long"),
+      .min(5, "trop court"),
     confirmPassword: yup
       .string()
       .required("Vous devez confirmer votre mot de passe")

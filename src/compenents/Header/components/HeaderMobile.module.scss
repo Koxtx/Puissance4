@@ -1,0 +1,22 @@
+.container {
+  position: absolute;
+  top: 80px;
+  right: 10px;
+  width: 200px;
+  border-radius: 20px;
+  background-color: #121212;
+  border: 2px solid #f7fafc;
+  box-shadow: var(--box-shadow);
+  a {
+    text-decoration: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 20px;
+    color: #f7fafc;
+    transition: background-color 0.2s;
+    &:hover {
+      background-color: #1212125d;
+      color: #f7fafc90;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@use "../../assets/styles/mixin" as mixin;
+.regle {
+  @include mixin.xs {
+    h1 {
+      font-size: larger;
+    }
+    h2 {
+      font-size: medium;
+    }
+    li {
+      font-size: smaller;
+    }
+    p {
+      font-size: smaller;
+    }
+  }
+}

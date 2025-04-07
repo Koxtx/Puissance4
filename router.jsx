@@ -6,6 +6,7 @@ import UserConnected from "./src/compenents/ProtectedRoutes/UserConnected";
 import Login from "./src/compenents/Log/Login";
 import Register from "./src/compenents/Log/Register";
 import Logout from "./src/compenents/Log/Logout";
+import RegleJeu from "./src/compenents/Reglesdujeu/RegleJeu";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,14 @@ export const router = createBrowserRouter([
         element: (
           <UserConnected>
             <Logout />
+          </UserConnected>
+        ),
+      },
+      {
+        path: "/regledujeu",
+        element: (
+          <UserConnected>
+            <RegleJeu />
           </UserConnected>
         ),
       },
